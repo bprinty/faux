@@ -111,22 +111,6 @@ Usage
 
 .. code-block:: python
 
-    import pytest
-
-    @pytest.fixture(scope='session')
-    def server():
-        """
-        Set up mock server for testing request caching.
-        """
-        from smock import Server
-        app = Server(__name__, cache='resources')
-        with app.run(port=1234):
-            yield
-        return
-
-
-.. code-block:: python
-
     >>> import requests
     >>> r = requests.get('http://localhost:1234/4db5fd8c-8aa6-4c29-b979-dab3ce71e64e')
     >>> print(r.json())
@@ -156,3 +140,31 @@ Usage
         "status": "ok",
         "data": "test"
     }
+
+
+
+.. code-block:: python
+
+    import unittest
+    import pytest
+
+
+    # fixtures
+    @pytest.fixture(scope='session')
+    def server():
+        """
+        Set up mock server for testing request caching.
+        """
+        from smock import Server
+        app = Server(__name__, cache='resources')
+        with app.run(port=1234):
+            yield
+        return
+
+
+    # tests
+    @pytest.mark.usefixtures("server")
+    class TestClass(unittest.TestCase):
+        pass
+
+
