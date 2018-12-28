@@ -1,10 +1,12 @@
-include AUTHORS.md
-include CONTRIBUTING.md
 include LICENSE
-include README.md
+include README.rst
+include Makefile
+include requirements.txt
 
+recursive-include smock *
 recursive-include tests *
+recursive-include docs *
+
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
-
-recursive-include docs *.rst Makefile
+recursive-exclude * *.egg-info

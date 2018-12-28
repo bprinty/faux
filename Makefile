@@ -1,50 +1,78 @@
 #
-# smock Makefile
+# gems Makefile
 #
 # @author <bprinty@gmail.com>
 # ------------------------------------------------------
 
 
-.PHONY: docs clean
+# config
+# ------
+PROJECT    = smock
+REMOTE     = origin
+BRANCH     = `git branch | grep '*' | awk '{print "-"$$2}' | grep -v 'master'`
+VERSION    = `python -c 'import $(PROJECT); print($(PROJECT).__version__)'`
+
+
+# targets
+# -------
+.PHONY: docs clean tag
 
 help:
-	@echo "clean    - remove all build, test, coverage and Python artifacts"
-	@echo "lint     - check style with flake8"
-	@echo "test     - run tests quickly with the default Python"
-	@echo "docs     - generate Sphinx HTML documentation, including API docs"
-	@echo "release  - package and upload a release"
-	@echo "build    - package"
-	@echo "install  - install the package to the active Python's site-packages"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-clean:
+
+info: ## list info about package
+	@echo $(PROJECT), version $(VERSION)$(BRANCH)
+	@echo last updated:`git log | grep 'Date:' | head -1 | sed 's/Date://g'`
+
+
+clean: ## remove all intermediate artifacts
 	rm -fr build/
 	rm -fr dist/
 	rm -fr .eggs/
+	find . -name '__pycache__' -exec rm -fr {} +
 	find . -name '*.egg-info' -exec rm -fr {} +
-	find . -name '*.egg' -exec rm -f {} +
+	find . -name '*.egg' -exec rm -fr {} +
+	find . -name '*.py[co]' -exec rm -f {} +
 
-lint:
-	flake8 smock tests
 
-test:
-	py.test tests
+lint: ## check style with flake8
+	flake8 gems tests
 
-docs:
-	rm -f docs/smock.rst
-	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ smock
-	$(MAKE) -C docs clean
-	$(MAKE) -C docs html
-	open docs/_build/html/index.html
+test: test-py2 test-py3 ## run tests quickly with the default Python
 
-release: clean
-	python setup.py sdist upload
-	python setup.py bdist_wheel upload
+test-py2:
+	@echo "Running python2 tests ... "
+	virtualenv -p python2 .py2
+	. .py2/bin/activate
+	python2 -m pytest tests
+	rm -rf .py2
 
-build: clean
+test-py3:
+	@echo "Running python3 tests ... "
+	virtualenv -p python3 .py3
+	. .py3/bin/activate
+	python3 -m pytest tests
+	rm -rf .py3
+
+
+tag: # tag repository for release
+	VER=$(VERSION) && if [ `git tag | grep "$$VER" | wc -l` -ne 0 ]; then git tag -d $$VER; fi
+	VER=$(VERSION) && git tag $$VER -m "gems, release $$VER"
+
+docs: ## build documentation
+	cd docs && make html
+
+
+build: clean ## build package for release
 	python setup.py sdist
 	python setup.py bdist_wheel
 	ls -l dist
 
-install: clean
+release: build tag ## build package and push to pypi
+	VER=$(VERSION) && git push $(REMOTE) :$$VER || echo 'Remote tag available'
+	VER=$(VERSION) && git push $(REMOTE) $$VER
+	twine upload --skip-existing dist/*
+
+install: clean ## use setuptools to install package
 	python setup.py install
