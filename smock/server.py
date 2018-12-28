@@ -1,93 +1,163 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #
-# Simple REST server.
+# Classes for setting up server mock.
 #
-# @author <bprinty@gmail.com>
-# ---------------------------------------------------
+# -----------------------------------
 
 
 # imports
 # -------
 import os
-from flask import Flask, jsonify, request, make_response
-from flask.ext.httpauth import HTTPBasicAuth
+import re
+import six
+import json
+import time
+import logging
+import hashlib
+from functools import wraps
+from xml.etree import ElementTree
+from threading import Thread
+from flask import Flask, jsonify, request, make_response, Response
+
+from .utils import format_data, request2path
 
 
-# init
-# ----
-config = {
-    'auth': False,
-    'debug': True,
-    'port': 9999,
-    'users': {
-        'user': 'pass'
-    }
-}
-app = Flask(__name__, static_url_path="")
-auth = HTTPBasicAuth()
-
-# disable authentication (if specified)
-if not config['auth']:
-    auth.login_required = lambda x: x
-
-
-# authentication
-# --------------
-@auth.get_password
-def get_password(username):
+# classes
+# -------
+class Server(object):
     """
-    Basic authentication. Uses `user` map in config dictionary
-    to check passwords.
-
-    :param username: Username to authenticate on.
+    Object mimicking flask server to allow for spinning
+    up server mock.
     """
-    if username in config['users']:
-        return config['users'][username]
-    return None
+
+    def __init__(self, *args, **kwargs):
+        self.cache = kwargs.pop('cache', None)
+        self.flask = Flask(*args, **kwargs)
+        self.flask.logger.setLevel(logging.ERROR)
+        if self.cache:
+            self.init()
+        return
+
+    def init(self):
+        """
+        Method for decorating custom url handlers on server.
+        """
+
+        # general-purpose request handler
+        @self.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+        def general(path):
+            # format path
+            path = request2path(path, args=request.args, payload=request.data)
+            filename = os.path.join(self.cache, path)
+
+            # if file doesn't exist, try to prepend the request method
+            if not os.path.exists(filename):
+                filename = os.path.join(self.cache, request.method.upper(), path)
+
+            # if file exists, read and return
+            if os.path.exists(filename):
+                with open(filename, 'r') as fi:
+                    data = fi.read()
+                return data
+
+            return jsonify({'error': 'Could not find local resource!'}), 404
 
 
-@auth.error_handler
-def unauthorized():
+        # requests on root url
+        @self.route('/', methods=['GET', 'POST', 'PUT', 'DELETE'])
+        def root():
+            return general('.')
+
+
+        # requests on root url with uuid
+        @self.route('/<uuid:uuid>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+        def ident(uuid):
+            return general('_uuid')
+
+
+        # requests on nested path with uuid
+        @self.route('/<path:path>/<uuid:uuid>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+        def path_ident(path, uuid):
+            return general(path + '/_uuid')
+
+        return
+
+    @property
+    def logger(self):
+        """
+        Expose flask logger so user can change settings.
+
+        TODO: update this class to use __getattr__ for defaulting
+              to internal getattr(self.flask, item)
+        """
+        return self.flask.logger
+
+    def route(self, *args, **kwargs):
+        """
+        Override flask route decorator to provide easier
+        UX for return data. With these changes, users can
+        simply return a dictionary or xml Element object instead
+        of needing to craft a full response.
+        """
+
+        # inner decorator to make return values easier
+        def inner(method):
+            @wraps(method)
+            def _(*args, **kwargs):
+                ret = method(*args, **kwargs)
+                
+                # json
+                if isinstance(ret, dict):
+                    ret = format_data(json.dumps(ret))
+                    ret = json.loads(ret, strict=False)
+                    return jsonify(ret), 200
+                
+                # xml
+                elif isinstance(ret, ElementTree.Element):
+                    ret = ElementTree.tostring(ret, encoding='utf8', method='xml')
+                    ret = format_data(ret)
+                    return Response(ret, mimetype='text/xml')
+                
+                # string
+                elif isinstance(ret, six.string_types):
+                    ret = format_data(ret)
+                    return ret, 200
+
+                # other data
+                else:
+                    return ret
+            return _
+
+        # proxy for using normal flask route decorator
+        def decorator(func):
+            return self.flask.route(*args, **kwargs)(inner(func))
+
+        return decorator
+
+    def run(self, **kwargs):
+        # TODO: decorate all routes for reading from cached directory
+        return Instance(self.flask, **kwargs)
+
+    def __exit__(self, type, value, traceback):
+        return
+
+
+class Instance(object):
     """
-    Deny access to unauthorized user.
+    Contextmanager for running managing server mock.
     """
-    return make_response(jsonify({'error': 'Unauthorized access'}), 403)
 
+    def __init__(self, app, **kwargs):
+        self.app = app
+        kwargs['use_reloader'] = False
+        self.thread = Thread(target=self.app.run, kwargs=kwargs)
+        self.thread.daemon = True
+        return
 
-# error handling
-# --------------
-@app.errorhandler(400)
-def bad_request(error):
-    """
-    Return response for bad request.
-    """
-    return make_response(jsonify({'error': 'Bad request'}), 400)
+    def __enter__(self):
+        self.thread.start()
+        time.sleep(1)
+        return self.thread
 
-
-@app.errorhandler(404)
-def not_found(error):
-    """
-    Return 404 for missing route.
-    """
-    return make_response(jsonify({'error': 'Not found'}), 404)
-
-
-# routes
-# ------
-@app.route('/status', methods=['GET'], endpoint='status')
-def status():
-    """
-    Manage server state.
-    """
-    return jsonify({'status': 'ok'}), 200
-
-
-# entrypoint
-# ----------
-def run():
-    app.run(
-        host='0.0.0.0',
-        debug=config['debug'],
-        port=config['port']
-    )
-    return
+    def __exit__(self, type, value, traceback):
+        return

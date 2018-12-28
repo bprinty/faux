@@ -31,14 +31,12 @@ htmlcov
 # Translations
 *.mo
 
-# Mr Developer
-.mr.developer.cfg
-.project
-.pydevproject
-
 # Complexity
 output/*.html
 output/*/index.html
 
 # Sphinx
 docs/_build
+
+# Testing
+tests/sandbox
