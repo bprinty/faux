@@ -63,7 +63,7 @@ setup(
     tests_require=test_requirements,
     entry_points={
         'console_scripts': [
-            'smock = smock.server:run'
+            'smock = smock.__main__:main'
         ],
     }
 )
