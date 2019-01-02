@@ -1,6 +1,10 @@
+recursive-exclude * *
+
 include LICENSE
 include README.rst
 include Makefile
+include setup.py
+include setup.cfg
 include requirements.txt
 
 recursive-include smock *
