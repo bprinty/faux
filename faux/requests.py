@@ -10,7 +10,6 @@
 # -------
 import os
 import requests
-from requests import get, post, put, delete
 from functools import wraps
 try:
     from urllib.parse import urlsplit, urlunsplit, parse_qsl
