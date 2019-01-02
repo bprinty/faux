@@ -33,7 +33,7 @@ class Server(object):
     def __init__(self, *args, **kwargs):
         self.cache = kwargs.pop('cache', None)
         self.flask = Flask(*args, **kwargs)
-        self.flask.logger.setLevel(logging.ERROR)
+        # self.flask.logger.setLevel(logging.ERROR)
         if self.cache:
             self.init()
         return
@@ -55,7 +55,7 @@ class Server(object):
                 filename = os.path.join(self.cache, request.method.upper(), path)
 
             # if file exists, read and return
-            if os.path.exists(filename):
+            if os.path.exists(filename) and not os.path.isdir(filename):
                 with open(filename, 'r') as fi:
                     data = fi.read()
                 return data
@@ -79,6 +79,12 @@ class Server(object):
         @self.route('/<path:path>/<uuid:uuid>', methods=['GET', 'POST', 'PUT', 'DELETE'])
         def path_ident(path, uuid):
             return general(path + '/_uuid')
+
+
+        # status url
+        @self.route('/_/status', methods=['GET'])
+        def status():
+            return {"status": "ok"}
 
         return
 
