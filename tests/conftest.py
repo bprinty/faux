@@ -34,6 +34,11 @@ def bootstrap():
 
     yield
 
+    import os
+    import shutil
+    from . import SANDBOX
+    if os.path.exists(SANDBOX):
+        shutil.rmtree(SANDBOX)
     return
 
 

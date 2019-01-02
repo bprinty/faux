@@ -23,6 +23,13 @@ class TestLocalMock(unittest.TestCase):
         response = requests.get(config.URL + '/missing')
         self.assertEqual(response.status_code, 404)
         return
+
+    def test_status(self):
+        response = requests.get(config.URL + '/_/status')
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data['status'], 'ok')
+        return
     
     def test_get_root(self):
         # json
