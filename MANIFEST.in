@@ -7,7 +7,7 @@ include setup.py
 include setup.cfg
 include requirements.txt
 
-recursive-include smock *
+recursive-include faux *
 recursive-include tests *
 recursive-include docs *
 

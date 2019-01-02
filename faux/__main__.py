@@ -32,7 +32,7 @@ parser_version.set_defaults(func=lambda x: sys.stdout.write(__version__ + '\n'))
 # ------
 def status(args):
     """
-    Check if smock server is up and running.
+    Check if faux server is up and running.
     """
     import requests
 
@@ -47,7 +47,7 @@ def status(args):
     if response.status_code == 200:
         data = response.json()
         if data['status'] != 'ok':
-            sys.stderr.write('Could not connect! See `smock serve` for instructions on how to run an instance.\n\n')
+            sys.stderr.write('Could not connect! See `faux serve` for instructions on how to run an instance.\n\n')
             sys.exit(1)
     sys.stdout.write(str(data) + '\n')
     return
@@ -64,7 +64,7 @@ parser_status.set_defaults(func=status)
 # ------
 def serve(args):
     """
-    Run smock server with specified directory structure.
+    Run faux server with specified directory structure.
     """
     import time
 

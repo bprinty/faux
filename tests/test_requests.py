@@ -13,15 +13,15 @@ import unittest
 import pytest
 from xml.etree import ElementTree
 
-import smock
-from smock import requests
+import faux
+from faux import requests
 
 from . import config, SANDBOX
 
 
 # config
 # ------
-smock.cache(SANDBOX)
+faux.cache(SANDBOX)
 
 
 # tests

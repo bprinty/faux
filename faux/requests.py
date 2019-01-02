@@ -10,6 +10,7 @@
 # -------
 import os
 import requests
+from functools import wraps
 try:
     from urllib.parse import urlsplit, urlunsplit, parse_qsl
 except ImportError:
@@ -28,7 +29,7 @@ def cache(path):
     Method for setting options during request session.
 
     Example:
-        >>> from smock import requests
+        >>> from faux import requests
         >>> requests.cache('/path/to/local/cache')
         >>> requests.get('http://localhost')
     """
@@ -46,6 +47,7 @@ def cache_response(func):
     Decorator for caching requests submitted with this module
     into a file structure that can be served by a mock server.
     """
+    @wraps(getattr(requests, func.__name__))
     def _(*args, **kwargs):
         global CACHE
         response = func(*args, **kwargs)

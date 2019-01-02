@@ -1,5 +1,5 @@
 #
-# gems Makefile
+# Makefile
 #
 # @author <bprinty@gmail.com>
 # ------------------------------------------------------
@@ -7,7 +7,7 @@
 
 # config
 # ------
-PROJECT    = smock
+PROJECT    = faux
 REMOTE     = origin
 BRANCH     = `git branch | grep '*' | awk '{print "-"$$2}' | grep -v 'master'`
 VERSION    = `python -c 'import $(PROJECT); print($(PROJECT).__version__)'`
@@ -30,6 +30,7 @@ clean: ## remove all intermediate artifacts
 	rm -fr build/
 	rm -fr dist/
 	rm -fr .eggs/
+	rm -rf docs/_build
 	find . -name '__pycache__' -exec rm -fr {} +
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -fr {} +

@@ -28,7 +28,7 @@ def bootstrap():
     """
     Global test setup/teardown fixture.
     """
-    from smock.utils import free_port
+    from faux.utils import free_port
     config.PORT = free_port()
     config.URL = 'http://localhost:{}'.format(config.PORT)
 
@@ -50,7 +50,7 @@ def server():
 
     # imports
     import logging
-    from smock import Server, request
+    from faux import Server, request
     from . import config, RESOURCES
     
     # set up app

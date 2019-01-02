@@ -9,7 +9,7 @@
 # -------
 import unittest
 import pytest
-from smock.utils import format_data
+from faux.utils import format_data
 import json
 
 

@@ -14,7 +14,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-import smock
+import faux
 
 
 # files
@@ -32,23 +32,23 @@ with open('README.rst') as readme_file:
 # exec
 # ----
 setup(
-    name='smock',
-    version=smock.__version__,
+    name='faux',
+    version=faux.__version__,
     description="Quick and easy server mocking.",
     long_description=readme,
     author="bprinty",
     author_email='bprinty@gmail.com',
-    url='https://github.com/bprinty/smock',
+    url='https://github.com/bprinty/faux',
     packages=[
-        'smock',
+        'faux',
     ],
-    package_dir={'smock':
-                 'smock'},
+    package_dir={'faux':
+                 'faux'},
     include_package_data=True,
     install_requires=requirements,
-    keywords='smock',
+    keywords='faux',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
@@ -63,7 +63,7 @@ setup(
     tests_require=test_requirements,
     entry_points={
         'console_scripts': [
-            'smock = smock.__main__:main'
+            'faux = faux.__main__:main'
         ],
     }
 )

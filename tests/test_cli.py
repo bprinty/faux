@@ -16,9 +16,9 @@ import json
 import ast
 import requests
 
-from smock import __version__
-from smock import __main__ as cli
-from smock.utils import free_port
+from faux import __version__
+from faux import __main__ as cli
+from faux.utils import free_port
 
 from . import RESOURCES, SANDBOX, ROOT
 
@@ -28,12 +28,12 @@ from . import RESOURCES, SANDBOX, ROOT
 class TestEntryPoints(unittest.TestCase):
 
     def call(self, subcommand, *args):
-        return subprocess.check_output('PYTHONPATH=$PYTHONPATH:{} python -m smock {} {}'.format(
+        return subprocess.check_output('PYTHONPATH=$PYTHONPATH:{} python -m faux {} {}'.format(
             ROOT, subcommand, ' '.join(args)
         ), stderr=subprocess.STDOUT, shell=True)
 
     def popen(self, subcommand, *args):
-        return subprocess.Popen('PYTHONPATH=$PYTHONPATH:{} python -m smock {} {}'.format(
+        return subprocess.Popen('PYTHONPATH=$PYTHONPATH:{} python -m faux {} {}'.format(
             ROOT, subcommand, ' '.join(args)
         ), stderr=subprocess.STDOUT, stdout=subprocess.PIPE, shell=True)
 
