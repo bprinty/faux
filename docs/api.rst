@@ -6,22 +6,22 @@ API
 Caching Request Data
 --------------------
 
-.. autofunction:: smock.requests.get
+.. autofunction:: faux.requests.get
 
-.. autofunction:: smock.requests.post
+.. autofunction:: faux.requests.post
 
-.. autofunction:: smock.requests.put
+.. autofunction:: faux.requests.put
 
-.. autofunction:: smock.requests.delete
+.. autofunction:: faux.requests.delete
 
 
 Mocking Servers
 ---------------
 
-.. autoclass:: smock.server.Server
+.. autoclass:: faux.server.Server
    :members:
 
 
-.. autoclass:: smock.server.Instance
+.. autoclass:: faux.server.Instance
    :members:
 

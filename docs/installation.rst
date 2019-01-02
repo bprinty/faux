@@ -18,12 +18,12 @@ Via GitHub
 
 .. code-block:: bash
 
-    $ git clone http://github.com/bprinty/smock.git
-    $ cd smock
+    $ git clone http://github.com/bprinty/faux.git
+    $ cd faux
     $ python setup.py install
 
 
 Questions/Feedback
 ------------------
 
-File an issue in the `GitHub issue tracker <https://github.com/bprinty/smock/issues>`_.
+File an issue in the `GitHub issue tracker <https://github.com/bprinty/faux/issues>`_.

@@ -1,4 +1,4 @@
-.. smock documentation master file
+.. faux documentation master file
 
 
 Welcome to SMock's documentation!
@@ -7,8 +7,7 @@ Welcome to SMock's documentation!
 Overview
 --------
 
-The `smock <http://github.com/bprinty/smock>`_ module provides utilities for mocking responses from external services during testing. TODO: MORE
-
+The `faux <http://github.com/bprinty/faux>`_ provides utilities for mocking responses from external services during testing. With `faux`, you can easily serve a directory structure mocking url endpoints for an externally managed service and use that server for testing.
 
 For documentation on how to use this package, see the `Usage <./usage.html>`_ section of the documentation.
 
