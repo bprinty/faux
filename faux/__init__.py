@@ -5,6 +5,6 @@ __email__ = 'bprinty@gmail.com'
 __version__ = '0.0.2'
 
 
-from .server import Server, request
+from .server import Server
 from . import client as requests
 from .client import get, post, put, delete, cache

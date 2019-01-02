@@ -50,7 +50,8 @@ def server():
 
     # imports
     import logging
-    from faux import Server, request
+    from faux import Server
+    from flask import request
     from . import config, RESOURCES
     
     # set up app

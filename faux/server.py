@@ -17,7 +17,7 @@ import hashlib
 from functools import wraps
 from xml.etree import ElementTree
 from threading import Thread
-from flask import Flask, jsonify, request, make_response, Response
+
 
 from .utils import format_data, request2path
 
@@ -31,6 +31,8 @@ class Server(object):
     """
 
     def __init__(self, *args, **kwargs):
+        from flask import Flask
+
         self.cache = kwargs.pop('cache', None)
         self.flask = Flask(*args, **kwargs)
         # self.flask.logger.setLevel(logging.ERROR)
@@ -42,6 +44,7 @@ class Server(object):
         """
         Method for decorating custom url handlers on server.
         """
+        from flask import request, jsonify
 
         # general-purpose request handler
         @self.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
@@ -105,6 +108,7 @@ class Server(object):
         simply return a dictionary or xml Element object instead
         of needing to craft a full response.
         """
+        from flask import jsonify, Response
 
         # inner decorator to make return values easier
         def inner(method):
