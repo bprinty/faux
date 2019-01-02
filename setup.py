@@ -14,20 +14,18 @@ try:
 except ImportError:
     from distutils.core import setup
 
-requirements = [
-    # TODO: put package requirements here
-]
-
-test_requirements = [
-    # TODO: put package test requirements here
-]
-
 import smock
 
 
 # files
 # -----
-with open('README.md') as readme_file:
+with open('requirements.txt') as fi:
+    requirements = fi.readlines()
+
+with open('tests/requirements.txt') as fi:
+    test_requirements = fi.readlines()
+
+with open('README.rst') as readme_file:
     readme = readme_file.read()
 
 
