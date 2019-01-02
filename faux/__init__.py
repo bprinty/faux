@@ -6,4 +6,5 @@ __version__ = '0.0.2'
 
 
 from .server import Server, request
-from .requests import get, post, put, delete, cache
+from . import client as requests
+from .client import get, post, put, delete, cache

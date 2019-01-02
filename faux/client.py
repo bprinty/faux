@@ -47,6 +47,7 @@ def cache_response(func):
     Decorator for caching requests submitted with this module
     into a file structure that can be served by a mock server.
     """
+
     @wraps(getattr(requests, func.__name__))
     def _(*args, **kwargs):
         global CACHE

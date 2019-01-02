@@ -6,13 +6,13 @@ API
 Caching Request Data
 --------------------
 
-.. autofunction:: faux.requests.get
+.. autofunction:: faux.client.get
 
-.. autofunction:: faux.requests.post
+.. autofunction:: faux.client.post
 
-.. autofunction:: faux.requests.put
+.. autofunction:: faux.client.put
 
-.. autofunction:: faux.requests.delete
+.. autofunction:: faux.client.delete
 
 
 Mocking Servers
