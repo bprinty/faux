@@ -82,7 +82,7 @@ def serve(args):
         while True:
             time.sleep(1)
             count += 1
-            if args.timeout is None or count > args.timeout:
+            if args.timeout is not None and count > args.timeout:
                 break
     return
 
