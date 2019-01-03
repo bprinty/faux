@@ -76,7 +76,7 @@ def serve(args):
     logging.basicConfig(level=getattr(logging, args.log_level))
 
     # run server and wait for timeout
-    app = Server(__name__, cache=args.path)
+    app = Server(args.name, cache=args.path)
     with app.run(port=args.port):
         count = 0
         while True:
