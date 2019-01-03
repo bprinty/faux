@@ -1,7 +1,7 @@
 .. faux documentation master file
 
 
-Welcome to SMock's documentation!
+Welcome to faux's documentation!
 ======================================
 
 Overview
