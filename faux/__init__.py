@@ -2,7 +2,7 @@
 
 __author__ = 'bprinty'
 __email__ = 'bprinty@gmail.com'
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 
 
 from .server import Server
