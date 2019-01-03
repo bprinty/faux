@@ -70,7 +70,13 @@ def server():
             'uuid': '{{uuid}}',
         }
         if request.args:
-            ret.update(request.args)
+            # account for flask version changing
+            # request.args structure
+            up = {
+                k: v[0] if isinstance(v, (list, tuple)) else v
+                for k, v in request.args.items()
+            }
+            ret.update(up)
         if request.json:
             ret.update(request.json)
         return ret
@@ -86,7 +92,13 @@ def server():
             'uuid': '{{uuid}}'
         }
         if request.args:
-            ret.update(request.args)
+            # account for flask version changing
+            # request.args structure
+            up = {
+                k: v[0] if isinstance(v, (list, tuple)) else v
+                for k, v in request.args.items()
+            }
+            ret.update(up)
         if request.json:
             ret.update(request.json)
         return ret
