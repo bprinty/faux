@@ -63,7 +63,10 @@ class Server(object):
                     data = fi.read()
                 return data
 
-            return jsonify({'error': 'Could not find local resource!'}), 404
+            return jsonify({
+                'error': 'Could not find local resource!',
+                'uri': filename
+            }), 404
 
 
         # requests on root url
