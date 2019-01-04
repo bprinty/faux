@@ -50,6 +50,8 @@ def request2path(url, args=None, payload=None):
 
     # convert payload into queryable hash postfix
     if payload:
+        if isinstance(payload, bytes):
+            payload = payload.decode()
         res = re.sub(r"\s+", "", ''.join(sorted(str(payload))))
         hc = hashlib.md5(res.encode('utf-8')).hexdigest()
         hc = hc[:7]

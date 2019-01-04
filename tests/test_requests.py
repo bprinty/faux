@@ -128,22 +128,22 @@ class TestStatic(unittest.TestCase):
         return
 
     def test_post_payload(self):
-        # test resource: 91cc355
+        # test resource: 1906fde
         response = requests.post(config.URL, json={'data': 'test'})
         self.assertEqual(response.status_code, 200)
         data = response.json()
-        with open(os.path.join(SANDBOX, 'POST', '91cc355'), 'r' ) as fi:
+        with open(os.path.join(SANDBOX, 'POST', '1906fde'), 'r' ) as fi:
             local = json.load(fi)
         self.assertEqual(data['status'], local['status'])
         self.assertEqual(data['param'], local['param'])
         return
 
     def test_post_params_payload(self):
-        # test resource: arg=test91cc355
+        # test resource: arg=test1906fde
         response = requests.post(config.URL + '?arg=test', json={'data': 'test'})
         self.assertEqual(response.status_code, 200)
         data = response.json()
-        with open(os.path.join(SANDBOX, 'POST', 'arg=test91cc355'), 'r' ) as fi:
+        with open(os.path.join(SANDBOX, 'POST', 'arg=test1906fde'), 'r' ) as fi:
             local = json.load(fi)
         self.assertEqual(data['status'], local['status'])
         self.assertEqual(data['param'], local['param'])
@@ -151,22 +151,22 @@ class TestStatic(unittest.TestCase):
         return
  
     def test_post_query_payload(self):
-        # test resource: query/91cc355
+        # test resource: query/1906fde
         response = requests.post(config.URL + '/query', json={'data': 'test'})
         self.assertEqual(response.status_code, 200)
         data = response.json()
-        with open(os.path.join(SANDBOX, 'POST', 'query', '91cc355'), 'r' ) as fi:
+        with open(os.path.join(SANDBOX, 'POST', 'query', '1906fde'), 'r' ) as fi:
             local = json.load(fi)
         self.assertEqual(data['status'], local['status'])
         self.assertEqual(data['param'], local['param'])
         return
 
     def test_post_query_params_payload(self):
-        # test resource: query/arg=test91cc355
+        # test resource: query/arg=test1906fde
         response = requests.post(config.URL + '/query?arg=test', json={'data': 'test'})
         self.assertEqual(response.status_code, 200)
         data = response.json()
-        with open(os.path.join(SANDBOX, 'POST', 'query', 'arg=test91cc355'), 'r' ) as fi:
+        with open(os.path.join(SANDBOX, 'POST', 'query', 'arg=test1906fde'), 'r' ) as fi:
             local = json.load(fi)
         self.assertEqual(data['status'], local['status'])
         self.assertEqual(data['param'], local['param'])
