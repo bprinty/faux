@@ -55,7 +55,7 @@ def status(args):
 
 parser_status = subparsers.add_parser('status')
 parser_status.add_argument('-S', '--ssl', action='store_true', help='Use ssl for connecting to server.', default=False)
-parser_status.add_argument('-H', '--host', type=str, help='Host to check.', default='127.0.0.1')
+parser_status.add_argument('-H', '--host', type=str, help='Host to check.', default='localhost')
 parser_status.add_argument('-P', '--port', type=int, help='Port to check.', default=9001)
 parser_status.set_defaults(func=status)
 
@@ -77,7 +77,7 @@ def serve(args):
 
     # run server and wait for timeout
     app = Server(args.name, cache=args.path)
-    with app.run(port=args.port):
+    with app.run(host=args.host, port=args.port):
         count = 0
         while True:
             time.sleep(1)
@@ -89,6 +89,7 @@ def serve(args):
 
 parser_serve = subparsers.add_parser('serve')
 parser_serve.add_argument('-P', '--port', type=int, help='Port to run server on.', default=9001)
+parser_serve.add_argument('-H', '--host', type=str, help='Host to run server on.', default=None)
 parser_serve.add_argument('-n', '--name', type=str, help='Optional name for server.', default=__name__)
 parser_serve.add_argument('-t', '--timeout', type=int, help='Timeout for stopping server (seconds).', default=None)
 parser_serve.add_argument('-l', '--log-level', help='Logging verbosity (DEBUG, INFO, ERROR, WARNING, CRITICAL, etc ...). Default is INFO', default='INFO')
