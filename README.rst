@@ -1,3 +1,22 @@
+
+|Build status| |Code coverage| |Maintenance yes| |GitHub license| |Documentation Status|
+
+.. |Build status| image:: https://travis-ci.org/bprinty/faux.png?branch=master
+   :target: https://travis-ci.org/bprinty/faux
+
+.. |Code coverage| image:: https://codecov.io/gh/bprinty/faux/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/bprinty/faux
+
+.. |Maintenance yes| image:: https://img.shields.io/badge/Maintained%3F-yes-green.svg
+   :target: https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity
+
+.. |GitHub license| image:: https://img.shields.io/github/license/Naereen/StrapDown.js.svg
+   :target: https://github.com/bprinty/faux/blob/master/LICENSE
+
+.. |Documentation Status| image:: https://readthedocs.org/projects/faux/badge/?version=latest
+   :target: http://faux.readthedocs.io/?badge=latest
+
+
 Faux
 ====
 
